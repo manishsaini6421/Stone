@@ -39,7 +39,7 @@ function filterProducts(category) {
 // Show admin panel with password protection
 function showAdminPanel() {
     const password = prompt('Enter admin password:');
-    if (password === '123456') {
+    if (password === 'Stoneadmin@123') {
         document.getElementById('adminPanel').classList.add('active');
         renderAdminList();
     } else if (password !== null) {
