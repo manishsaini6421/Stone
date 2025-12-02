@@ -8,7 +8,7 @@ let products = JSON.parse(localStorage.getItem('stoneProducts')) || [
         name: 'Hand-carved Stone Statue',
         category: 'statues',
         description: 'Beautiful hand-carved stone statue with intricate details. Perfect for garden or home decoration.',
-        icon: '🗿',
+        image: './images/krishna.png',
         price: 'On Request'
     },
     {

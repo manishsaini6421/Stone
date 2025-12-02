@@ -1,5 +1,4 @@
-// SCRIPT.JS - Main Application Logic
-// This file handles all JavaScript functionality
+// SCRIPT.JS - Main Application Logic with Image Upload
 
 // Render product gallery
 function renderGallery(filter = 'all') {
@@ -11,8 +10,14 @@ function renderGallery(filter = 'all') {
     filtered.forEach(product => {
         const div = document.createElement('div');
         div.className = 'gallery-item';
+        
+        // Check if product has an image URL or use icon
+        const imageContent = product.imageUrl ? 
+            `<img src="${product.imageUrl}" alt="${product.name}" class="gallery-item-img">` :
+            `<div class="gallery-item-image">${product.icon}</div>`;
+        
         div.innerHTML = `
-            <div class="gallery-item-image">${product.icon}</div>
+            ${imageContent}
             <div class="gallery-item-content">
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
@@ -54,16 +59,51 @@ function renderAdminList() {
     
     getAllProducts().forEach(product => {
         const div = document.createElement('div');
-        div.style.cssText = 'background: var(--light-color); padding: 1rem; margin: 1rem 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;';
+        div.style.cssText = 'background: var(--light-color); padding: 1rem; margin: 1rem 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;';
+        
+        const hasImage = product.imageUrl ? '🖼️' : '🎨';
+        
         div.innerHTML = `
-            <div>
-                <strong>${product.icon} ${product.name}</strong><br>
-                <small>${product.description}</small>
+            <div style="flex: 1; min-width: 200px;">
+                <strong>${hasImage} ${product.name}</strong><br>
+                <small>${product.description}</small><br>
+                <small style="color: #666;">Category: ${product.category} | Price: ${product.price}</small>
+                ${product.imageUrl ? `<br><small style="color: #FF8C00;"><strong>✓ Image uploaded</strong></small>` : ''}
             </div>
-            <button onclick="deleteProductAdmin(${product.id})" style="background-color: #d9534f; padding: 0.5rem 1rem;">Delete</button>
+            <div style="display: flex; gap: 0.5rem;">
+                <button onclick="editProduct(${product.id})" style="background-color: #FF8C00; padding: 0.5rem 1rem; color: white; border: none; border-radius: 4px; cursor: pointer;">Edit</button>
+                <button onclick="deleteProductAdmin(${product.id})" style="background-color: #d9534f; padding: 0.5rem 1rem; color: white; border: none; border-radius: 4px; cursor: pointer;">Delete</button>
+            </div>
         `;
         list.appendChild(div);
     });
+}
+
+// Edit product
+function editProduct(id) {
+    const product = getProductById(id);
+    if (!product) return;
+    
+    document.getElementById('productName').value = product.name;
+    document.getElementById('productCategory').value = product.category;
+    document.getElementById('productDescription').value = product.description;
+    document.getElementById('productIcon').value = product.icon;
+    document.getElementById('productPrice').value = product.price;
+    
+    // Show current image if exists
+    if (product.imageUrl) {
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.innerHTML = `
+            <div style="margin-top: 1rem; text-align: center;">
+                <img src="${product.imageUrl}" style="max-width: 150px; border-radius: 5px; margin-bottom: 0.5rem;">
+                <p><small>Current image</small></p>
+            </div>
+        `;
+    }
+    
+    // Store edit ID
+    document.getElementById('productForm').dataset.editId = id;
+    document.getElementById('submitBtn').textContent = 'Update Product';
 }
 
 // Delete product from admin panel
@@ -76,26 +116,80 @@ function deleteProductAdmin(id) {
     }
 }
 
+// Handle image upload
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const imageUrl = e.target.result;
+        document.getElementById('productForm').dataset.imageUrl = imageUrl;
+        
+        // Show preview
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.innerHTML = `
+            <div style="margin-top: 1rem; text-align: center;">
+                <img src="${imageUrl}" style="max-width: 150px; border-radius: 5px; margin-bottom: 0.5rem;">
+                <p><small>Preview - Ready to upload</small></p>
+            </div>
+        `;
+    };
+    reader.readAsDataURL(file);
+}
+
 // Handle product form submission
 document.addEventListener('DOMContentLoaded', function() {
     const productForm = document.getElementById('productForm');
+    const imageUpload = document.getElementById('productImage');
+    
+    if (imageUpload) {
+        imageUpload.addEventListener('change', handleImageUpload);
+    }
+    
     if (productForm) {
         productForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const newProduct = {
-                name: document.getElementById('productName').value,
-                category: document.getElementById('productCategory').value,
-                description: document.getElementById('productDescription').value,
-                icon: document.getElementById('productIcon').value || '🎨',
-                price: document.getElementById('productPrice').value || 'On Request'
-            };
+            const editId = productForm.dataset.editId;
+            const imageUrl = productForm.dataset.imageUrl;
             
-            addProduct(newProduct);
+            if (editId) {
+                // Update existing product
+                const updatedProduct = {
+                    name: document.getElementById('productName').value,
+                    category: document.getElementById('productCategory').value,
+                    description: document.getElementById('productDescription').value,
+                    icon: document.getElementById('productIcon').value || '🎨',
+                    price: document.getElementById('productPrice').value || 'On Request'
+                };
+                
+                if (imageUrl) {
+                    updatedProduct.imageUrl = imageUrl;
+                }
+                
+                updateProduct(parseInt(editId), updatedProduct);
+                delete productForm.dataset.editId;
+                alert('Product updated successfully! ✅');
+            } else {
+                // Add new product
+                const newProduct = {
+                    name: document.getElementById('productName').value,
+                    category: document.getElementById('productCategory').value,
+                    description: document.getElementById('productDescription').value,
+                    icon: document.getElementById('productIcon').value || '🎨',
+                    price: document.getElementById('productPrice').value || 'On Request',
+                    imageUrl: imageUrl || null
+                };
+                
+                addProduct(newProduct);
+                alert('Product added successfully! ✅');
+            }
+            
             renderGallery();
             renderAdminList();
             clearForm();
-            alert('Product added successfully! ✅');
+            document.getElementById('imagePreview').innerHTML = '';
         });
     }
 });
@@ -104,6 +198,10 @@ document.addEventListener('DOMContentLoaded', function() {
 function clearForm() {
     document.getElementById('productForm').reset();
     document.getElementById('productIcon').value = '🎨';
+    document.getElementById('imagePreview').innerHTML = '';
+    document.getElementById('productForm').dataset.editId = '';
+    document.getElementById('productForm').dataset.imageUrl = '';
+    document.getElementById('submitBtn').textContent = 'Add Product';
 }
 
 // Smooth scroll to sections

@@ -5,45 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shriram Stone Art's Corporation - Premium Stone Handicrafts</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .gallery-item-img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            display: block;
-        }
-        
-        #imagePreview {
-            margin-top: 1rem;
-            text-align: center;
-        }
-        
-        #imagePreview img {
-            max-width: 150px;
-            border-radius: 5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .file-input-label {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background-color: #FF8C00;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            margin-bottom: 0.5rem;
-        }
-        
-        .file-input-label:hover {
-            background-color: #FF9900;
-        }
-        
-        #productImage {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -140,17 +101,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Product Image (Optional - Upload instead of icon)</label>
-                    <label class="file-input-label">
-                        📷 Choose Image
-                        <input type="file" id="productImage" accept="image/*">
-                    </label>
-                    <div id="imagePreview"></div>
-                </div>
-
-                <div class="form-group">
-                    <label>Product Icon/Emoji (If no image uploaded)</label>
-                    <input type="text" id="productIcon" placeholder="e.g., 🗿" value="🎨">
+                    <label>Product Image/Icon (Emoji or URL)</label>
+                    <input type="text" id="productIcon" placeholder="e.g., 🗿 or image URL" value="🎨">
                 </div>
 
                 <div class="form-group">
@@ -159,7 +111,7 @@
                 </div>
 
                 <div class="btn-group">
-                    <button type="submit" id="submitBtn">Add Product</button>
+                    <button type="submit">Add Product</button>
                     <button type="button" onclick="clearForm()">Clear</button>
                     <button type="button" onclick="hideAdminPanel()">Close</button>
                 </div>
