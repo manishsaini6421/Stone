@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shriram Stone Art's Corporation - Premium Stone Handicrafts</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                🏛️ Shriram Stone Art's
+            </div>
+            <nav>
+                <a onclick="scrollToSection('home')">Home</a>
+                <a onclick="scrollToSection('products')">Products</a>
+                <a onclick="scrollToSection('about')">About</a>
+                <a onclick="scrollToSection('contact')">Contact</a>
+                <a onclick="showAdminPanel()">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero" id="home">
+            <h1>Premium Stone Handicrafts & Sculptures</h1>
+            <p>Finest Quality Indian Stone Art & Decorative Products</p>
+            <div class="btn-group">
+                <button onclick="scrollToSection('products')">View Products</button>
+                <a href="https://wa.me/919828132854?text=Hello%20Shriram%20Stone%20Art%27s%21%20I%20am%20interested%20in%20your%20products" class="btn btn-secondary" target="_blank">WhatsApp Us</a>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="section" id="about">
+            <div class="container">
+                <h2 class="section-title">About Us</h2>
+                <div class="company-info">
+                    <div class="info-card">
+                        <h3>👔 Leadership</h3>
+                        <p><strong>Owner:</strong> Jayram Saini</p>
+                        <p><strong>CEO:</strong> Dharmsingh Saini</p>
+                        <p><strong>Marketing Manager:</strong> Gajendra Saini</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>📍 Location</h3>
+                        <p>Langra Balaji, NH-21</p>
+                        <p>Manpur, Dausa</p>
+                        <p>Rajasthan - 303509</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>🎨 Our Specialty</h3>
+                        <p>Premium Stone Handicrafts</p>
+                        <p>Sculptures & Decorative Art</p>
+                        <p>Custom Stone Products</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="section" id="products">
+            <div class="container">
+                <h2 class="section-title">Our Products</h2>
+                
+                <div class="filter-section">
+                    <button class="filter-btn active" onclick="filterProducts('all')">All Products</button>
+                    <button class="filter-btn" onclick="filterProducts('statues')">Statues</button>
+                    <button class="filter-btn" onclick="filterProducts('decorative')">Decorative</button>
+                    <button class="filter-btn" onclick="filterProducts('garden')">Garden Art</button>
+                </div>
+
+                <div class="gallery" id="gallery"></div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="admin-panel" id="adminPanel">
+            <h2 class="section-title">Admin Dashboard - Add Products</h2>
+            <form id="productForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="productCategory" required>
+                            <option>statues</option>
+                            <option>decorative</option>
+                            <option>garden</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea id="productDescription" required placeholder="Enter product details..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Product Image/Icon (Emoji or URL)</label>
+                    <input type="text" id="productIcon" placeholder="e.g., 🗿 or image URL" value="🎨">
+                </div>
+
+                <div class="form-group">
+                    <label>Price (Optional)</label>
+                    <input type="text" id="productPrice" placeholder="e.g., On Request">
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit">Add Product</button>
+                    <button type="button" onclick="clearForm()">Clear</button>
+                    <button type="button" onclick="hideAdminPanel()">Close</button>
+                </div>
+            </form>
+
+            <h3 style="margin-top: 2rem; color: var(--primary-color);">Manage Products</h3>
+            <div id="adminProductsList"></div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="section" id="contact">
+            <div class="container">
+                <h2 class="section-title">Contact Us</h2>
+                <div class="contact-section">
+                    <div class="contact-info">
+                        <h3>📞 Get in Touch</h3>
+                        <p>
+                            <strong>Primary:</strong><br>
+                            <a href="tel:+919828132854">+91 9828132854</a>
+                        </p>
+                        <p>
+                            <strong>Secondary:</strong><br>
+                            <a href="tel:+917976649478">+91 79766 49478</a>
+                        </p>
+                        <p>
+                            <strong>Helpline:</strong><br>
+                            <a href="tel:+917230944546">+91 7230944546</a>
+                        </p>
+                        <p>
+                            <strong>Email:</strong><br>
+                            <a href="mailto:gajanandsaini154@gmail.com">gajanandsaini154@gmail.com</a>
+                        </p>
+                        <a href="https://wa.me/919828132854?text=Hello%20Shriram%20Stone%20Art%27s%21%20I%20am%20interested%20in%20your%20products" class="whatsapp-link" target="_blank">
+                            💬 Message on WhatsApp
+                        </a>
+                    </div>
+                    <div class="contact-form">
+                        <h3>Quick Message</h3>
+                        <form onsubmit="handleQuickMessage(event)">
+                            <div class="form-group">
+                                <label>Your Name *</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Your Phone *</label>
+                                <input type="tel" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Message *</label>
+                                <textarea required placeholder="Tell us about your inquiry..."></textarea>
+                            </div>
+                            <button type="submit">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Shriram Stone Art's Corporation. All rights reserved.</p>
+        <p>📍 Langra Balaji, NH-21, Manpur, Dausa, Rajasthan - 303509</p>
+    </footer>
+
+    <script src="database.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
